@@ -1,0 +1,435 @@
+openapi: 3.0.3
+info:
+  title: misty
+  description: A tool that uses mist api libraries to configure mist objects based on a yaml formatted file
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: himanshu.surendra@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: /
+tags:
+  - name: Generic
+    description: Generic API's
+  - name: Sites
+    description: Configure Sites
+  - name: Networks
+    description: Configure Networks
+  - name: Applications
+    description: Configure Applications
+  - name: vpns
+    description: Configure hub endpoints
+  - name: Hub Profiles
+    description: Configure Hub Profiles
+  - name: WAN Edge Templates
+    description: Configure Wan Edge Templates
+  - name: Switch Templates
+    description: Configure Switch Templates
+  - name: WLAN
+    description: Configure Wireless LAN
+  - name: Assign Devices
+    description: Assign Devices To Sites
+  - name: All Operations
+    description: Run all the operations at one go
+paths:
+  /api/logs:
+    get:
+      tags:
+        - Generic
+      summary: get last 100 logs from misty
+      description: ''
+      operationId: getLogs
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/str'
+  /api:
+    get:
+      tags:
+        - Generic
+      summary: Get entire data file contents
+      description: ''
+      operationId: home
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/reload_data:
+    get:
+      tags:
+        - Generic
+      summary: reload the data and environment yaml files
+      description: ''
+      operationId: reloadData
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/create_sites:
+    get:
+      tags:
+        - Sites
+      summary: Create Sites in Mist
+      description: ''
+      operationId: createSites
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/delete_sites:
+    get:
+      tags:
+        - Sites
+      summary: Delete Sites from Mist
+      description: ''
+      operationId: deleteSites
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/create_site_variables:
+    get:
+      tags:
+        - Sites
+      summary: Create Site Variables in Mist
+      description: ''
+      operationId: createSiteVariables
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/create_networks:
+    get:
+      tags:
+        - Networks
+      summary: Create Networks in Mist
+      description: ''
+      operationId: createNetworks
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/delete_networks:
+    get:
+      tags:
+        - Networks
+      summary: Create Networks from Mist
+      description: ''
+      operationId: deleteNetworks
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/create_applications:
+    get:
+      tags:
+        - Applications
+      summary: Create Applications in Mist
+      description: ''
+      operationId: createApplications
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/delete_applications:
+    get:
+      tags:
+        - Applications
+      summary: Delete Applications from Mist
+      description: ''
+      operationId: deleteApplications
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/create_vpns:
+    get:
+      tags:
+        - vpns
+      summary: Create vpn endpoints in Mist
+      description: ''
+      operationId: createVpns
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/delete_vpns:
+    get:
+      tags:
+        - vpns
+      summary: Delete vpn endpoints from Mist
+      description: ''
+      operationId: deleteVpns
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/create_hub_profiles:
+    get:
+      tags:
+        - Hub Profiles
+      summary: Create Hub Profiles in Mist
+      description: ''
+      operationId: createHubProfiles
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/delete_hub_profiles:
+    get:
+      tags:
+        - Hub Profiles
+      summary: Delete Hub Profiles from Mist
+      description: ''
+      operationId: deleteHubProfiles
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/create_wan_edge_templates:
+    get:
+      tags:
+        - WAN Edge Templates
+      summary: Create Wan Edge Templates in Mist
+      description: ''
+      operationId: createWanEdgeTemplates
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/delete_wan_edge_templates:
+    get:
+      tags:
+        - WAN Edge Templates
+      summary: Delete Wan Edge Templates from Mist
+      description: ''
+      operationId: deleteWanEdgeTemplates
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/create_switch_templates:
+    get:
+      tags:
+        - Switch Templates
+      summary: Create Switch Templates in Mist
+      description: ''
+      operationId: createSwitchTemplates
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/delete_switch_templates:
+    get:
+      tags:
+        - Switch Templates
+      summary: Delete Switch Templates from Mist
+      description: ''
+      operationId: deleteSwitchTemplates
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/create_wlan_templates:
+    get:
+      tags:
+        - WLAN
+      summary: Create WLAN Templates in Mist
+      description: ''
+      operationId: createWlanTemplates
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/delete_wlan_templates:
+    get:
+      tags:
+        - WLAN
+      summary: Delete WLAN Templates from Mist
+      description: ''
+      operationId: deleteWlanTemplates
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/create_wlans:
+    get:
+      tags:
+        - WLAN
+      summary: Create WLAN's in Mist
+      description: ''
+      operationId: createWlans
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/delete_wlans:
+    get:
+      tags:
+        - WLAN
+      summary: Delete WLAN's from Mist
+      description: ''
+      operationId: deleteWlans
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/create_psks:
+    get:
+      tags:
+        - WLAN
+      summary: Create PSK's in Mist
+      description: ''
+      operationId: createPsks
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/delete_psks:
+    get:
+      tags:
+        - WLAN
+      summary: Delete PSK's from Mist
+      description: ''
+      operationId: deletePsks
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/assign_devices:
+    get:
+      tags:
+        - Assign Devices
+      summary: Assign devices to Sites in Mist
+      description: ''
+      operationId: assignDevices
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/unassign_devices:
+    get:
+      tags:
+        - Assign Devices
+      summary: Unassign devices from Sites in Mist
+      description: ''
+      operationId: unassignDevices
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/create_all:
+    get:
+      tags:
+        - All Operations
+      summary: Create all the configuration in Mist from the data yaml
+      description: ''
+      operationId: createAll
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+  /api/delete_all:
+    get:
+      tags:
+        - All Operations
+      summary: Delete all the configuration fromn Mist
+      description: ''
+      operationId: deleteAll
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+                schema:
+                $ref: '#/components/schemas/jsonified'
+components:
+  schemas:
+    jsonified:
+        type: object
+    str:
+        type: string

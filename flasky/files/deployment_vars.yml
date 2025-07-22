@@ -1,0 +1,306 @@
+---
+wan_edge_templates:
+  - name: automation_spokes
+    type: spoke
+    sites:
+      - BRANCH1
+      - BRANCH2
+    ip_configs:
+      spoke_lan:
+        type: static
+        ip: "172.16.{{third_lan_octed}}.1"
+    dns_servers:
+      - 10.85.130.156
+    port_config:
+      ge-0/0/0:
+        name: spoke_wan1
+        usage: wan
+        ip_config:
+          type: dhcp
+        vpn_paths:
+          Hub-wan1.OrgOverlay:
+            role: spoke
+            bfd_profile: broadband
+            key: 1
+          Hub-wan2.OrgOverlay:
+            role: spoke
+            bfd_profile: mpls
+            key: 1
+      ge-0/0/2:
+        name: spoke_wan2
+        usage: wan
+        ip_config:
+          type: dhcp
+        vpn_paths:
+          Hub-wan1.OrgOverlay:
+            role: spoke
+            bfd_profile: broadband
+            key: 1
+          Hub-wan2.OrgOverlay:
+            role: spoke
+            bfd_profile: mpls
+            key: 1
+      ge-0/0/1:
+        networks:
+          - spoke_lan
+        usage: lan
+    path_preferences:
+      to_internet:
+        strategy: ordered
+        paths:
+          - name: spoke_wan1
+            type: wan
+          - name: spoke_wan2
+            type: wan
+    dhcpd_config:
+      enabled: True
+      spoke-lan:
+        type: local
+        ip_start: "172.16.{{third_lan_octed}}.3"
+        ip_end: "172.16.{{third_lan_octed}}.10"
+        gateway: "172.16.{{third_lan_octed}}.2"
+        dns_servers:
+          - 10.85.128.1
+    oob_ip_config:
+      type: dhcp
+      node1: {
+        type: dhcp
+      }
+    service_policies:
+      - name: hub-spoke
+        tenants:
+        - hub_lan
+        services:
+        - spokes_lan
+        action: allow
+      - name: spoke-hub
+        tenants:
+        - spoke_lan
+        services:
+        - hub_lan
+        action: allow
+      - name: spoke-spoke
+        tenants:
+        - spoke_lan
+        services:
+        - spokes_lan
+        action: allow
+hub_profiles:
+  - name: automation_dc1_hub
+    type: gateway
+    site: Hub
+    device: 
+      name: datacenter1_router
+      mac: "02:00:01:3b:16:31"
+    ip_configs:
+      hub_lan:
+        type: static
+        ip: "172.16.130.2"
+    dns_servers:
+      - 10.85.130.156
+    port_config:
+      ge-0/0/0:
+        name: dc1_wan1
+        usage: wan
+        ip_config:
+          type: static
+          ip: "10.10.20.10"
+          netmask: /24
+          gateway: "10.10.20.1"
+        vpn_paths:
+          Hub-wan1.OrgOverlay:
+            role: hub
+      ge-0/0/2:
+        name: dc1_wan2
+        usage: wan
+        ip_config:
+          type: static
+          ip: "10.10.50.10"
+          netmask: /24
+          gateway: "10.10.50.1"
+        vpn_paths:
+          Hub-wan2.OrgOverlay:
+            role: hub
+      ge-0/0/1:
+        networks:
+          - hub_lan
+        usage: lan
+    path_preferences:
+      to_internet:
+        strategy: ordered
+        paths:
+          - name: dc1_wan1
+            type: wan
+          - name: dc1_wan2
+            type: wan
+    dhcpd_config:
+      enabled: True
+      hub_lan:
+        type: local
+        ip_start: 172.16.130.3
+        ip_end: 172.16.130.10
+        gateway: 172.16.130.2
+        dns_servers:
+          - 10.85.130.156
+    service_policies:
+      - name: hub-spoke
+        tenants:
+        - hub_lan
+        services:
+        - spokes_lan
+        action: allow
+      - name: spoke-hub
+        tenants:
+        - spoke_lan
+        services:
+        - hub_lan
+        action: allow
+      - name: spoke-spoke
+        tenants:
+        - spoke_lan
+        services:
+        - spokes_lan
+        action: allow
+      - name: hub-internet-lbo
+        tenants:
+        - hub_lan
+        services:
+        - internet
+        action: allow
+        path_preference: to_internet
+applications:
+  - name: internet
+    type: custom
+    addresses:
+      - 0.0.0.0/0
+    specs:
+      - protocol: any
+    traffic_type: default
+  - name: spoke_lan
+    type: custom
+    addresses:
+      - "172.16.{{third_lan_octed}}.0/{{lan_mask}}"
+    specs:
+      - protocol: any
+    traffic_type: default
+  - name: hub_lan
+    type: custom
+    addresses:
+      - 172.16.130.0/24
+    specs:
+      - protocol: any
+    traffic_type: default
+  - name: spokes_lan
+    type: custom
+    addresses:
+      - 172.16.0.0/16
+    specs:
+      - protocol: any
+    traffic_type: default
+networks:
+  - name: hub_lan
+    subnet: "172.16.130.0/24"
+    ip: "172.16.130.0"
+    prefix: "24"
+    disallow_mist_services: False
+    isolation: True
+    vpn_access:
+      OrgOverlay:
+        routed: True
+        no_readvertise_to_overlay: False
+        no_readvertise_to_lan_bgp: False
+        no_readvertise_to_lan_ospf: False
+    #tenants: &tenants_1
+    #  WEB_SERVER_1:
+    #    addresses:
+    #      - 10.99.99.130
+    #  MQTT_SERVER_1:
+    #    addresses:
+    #      - 10.99.99.131
+    #users: *tenants_1
+    #internet_access:
+    #  destination_nat:
+    #    "192.168.170.2:2222":
+    #      name: Desktop1_SSH
+    #      internal_ip: 10.99.99.99
+    #      port: "22"
+  - name: spoke_lan
+    subnet: "172.16.{{third_lan_octed}}.0/{{lan_mask}}"
+    ip: "172.16.{{third_lan_octed}}.0"
+    prefix: "{{lan_mask}}"
+    disallow_mist_services: False
+    isolation: True
+    vpn_access:
+      OrgOverlay:
+        routed: True
+        no_readvertise_to_overlay: False
+        no_readvertise_to_lan_bgp: False
+        no_readvertise_to_lan_ospf: False
+    #tenants: &tenants_2
+    #  WEB_SERVER_2:
+    #    addresses:
+    #      - 10.88.88.130
+    #  MQTT_SERVER_2:
+    #    addresses:
+    #      - 10.88.88.131
+    #users: *tenants_2
+sites:
+  - info:
+      name: BRANCH1
+      address: 201 Spoke1 Ave, Sunnyvale, CA 94086
+      latlng:
+        lat: 37.36883
+        lng: -122.03635
+      managed: True
+      country_code: US
+    settings:
+      vars:
+        third_lan_octed: 129
+        lan_mask: 24
+      rogue:
+        min_rssi: -85
+        min_duration: 1
+        enabled: True
+        honeypot_enabled: True
+    assignments:
+      edges:
+        - name: branch1_router
+          mac: "02:00:01:44:38:a5"
+  - info:
+      name: BRANCH2
+      address: 201 Spoke2 Ave, Mountain View, CA 94086
+      latlng:
+        lat: 38.36883
+        lng: -122.03635
+      managed: True
+      country_code: US
+    settings:
+      vars:
+        third_lan_octed: 128
+        lan_mask: 24
+      rogue:
+        min_rssi: -85
+        min_duration: 1
+        enabled: True
+        honeypot_enabled: True
+    assignments:
+      edges:
+        - name: branch2_router
+          mac: "02:00:01:e9:04:b1"
+  - info:
+      name: DATACENTER1
+      address: 100 hub Ave, Sunnyvale, CA 94086
+      latlng:
+        lat: 37.363863
+        lng: -129.901098
+      managed: True
+      country_code: US
+    settings:
+      vars:
+    assignments:
+      edges:
+        - name: datacenter1_router
+          mac: "02:00:01:3b:16:31"
+vpns:
+  - Hub-wan1
+  - Hub-wan2
