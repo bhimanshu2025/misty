@@ -67,9 +67,10 @@ python run.py
 
 ## STEP 7  [OPTIONAL]
 Make necessary customizations in /root/misty/flasky/files/
+Refer misty/User Guide/ for steps to configure and deploy topologies.
 
 ## STEP 8
-Access the Application through a browser at http://<server IP>:5000
+Access the Application through a browser at http://<server IP>:5000/swagger
 
 # OPTION 2: Kubernetes [WIP]
 WIP
