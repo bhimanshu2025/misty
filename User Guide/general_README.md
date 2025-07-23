@@ -1,6 +1,8 @@
 # misty
 Refer this write-up incase you have used misty/README.md to deploy misty project. This doc explains steps to configure and deploy topologies through misty.
 
+>[!Note]
+>The tool only configures objects in Mist. Its expected the devices are adopted in Mist already either through whitebox onboarding or through claim code adoption process.
 
 ## STEP 1
 This doc assumes user has followed steps from misty/README.md to deploy misty project. 

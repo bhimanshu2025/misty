@@ -24,7 +24,7 @@ Download application from git repo
 ```
 cd /root/
 git clone https://css-git.juniper.net/bhimanshu/misty.git
-cd cat
+cd misty
 git config --global user.name "FirstName LastName"
 git config --global user.email "abcd@gmail.com"
 ```

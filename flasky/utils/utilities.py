@@ -37,13 +37,21 @@ class MistObj():
             self.session = mistapi.APISession(apitoken=self.MIST_TOKEN, host=self.MIST_HOST )
             current_app.logger.debug(self.data)
             self.session.login()
+            ret,status_code = self.data, 200
         except exceptions.TemplateSyntaxError as err:
             current_app.logger.exception(f'Failed to parse the jinja2 file. Error is {err}')
+            ret,status_code = f'Failed to parse the jinja2 file. Error is {err}', 500
+        except FileNotFoundError as err:
+            current_app.logger.exception(f'File not found. Error is {err}')
+            ret,status_code = f'File not found. Error is {err}', 500
         except Exception as err:
             current_app.logger.exception(f'Error is {err}')
+            ret,status_code = f'Error is {err}', 500
+        finally:
+            return ret, status_code
 
     def reload_data(self):
-        self.__load_data()
+        return self.__load_data()
 
     @staticmethod
     def filter_assets(assets, filter={}):

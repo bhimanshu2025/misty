@@ -30,8 +30,8 @@ def logs(lines=100):
 
 @main.route("/api/reload_data", methods=['GET'])
 def reload_data():
-    current_app.config['MIST_OBJ'].reload_data()
-    return current_app.config['MIST_OBJ'].data
+    ret, status_code = current_app.config['MIST_OBJ'].reload_data()
+    return ret, status_code
 
 @main.route("/api/create_networks", methods=['GET'])
 def create_networks():
