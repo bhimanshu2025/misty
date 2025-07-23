@@ -1,0 +1,11 @@
+ap_spoke1_mac: 5c:5b:35:1f:62:e2
+ap_hub_mac: 5c:5b:35:1f:58:24
+ex_spoke1_mac: 58:e4:34:7c:b3:80
+ex_hub_mac: 58:e4:34:7c:d5:00
+ssr_spoke1_mac: 90:ec:77:87:0c:c8
+ssr_hub_mac: 90:ec:77:87:12:56
+host: api.ac2.mist.com
+org_id: 0d0f04a5-06cc-4eff-9af1-16df2512125ce
+token: gDudTc4FuBVaRYZupj12Xc8KAgADCobchhp6VMDiUAup3zn23f1YnCXQ9DWhIEuAhJKjCk9vnEAOsSWIP90aNIbwIO212FU6
+#mist_user: xxx
+#mist_password: xxx
