@@ -15,7 +15,7 @@ cp misty/flasky/static/templates/full_stack_v1/deployment_vars.j2 misty/flasky/f
 cp misty/flasky/static/templates/full_stack_v1/sample_env.yml misty/flasky/files/env.yml
 
 Edit the misty/flasky/files/env.yml file to enter your Mist credentials.
-The env.yml file is specific to topology. It contains Juniper Mist credentials and any variables that are defined in misty/flasky/files/deployment_vars.j2 template.  If env.yml file doesnt exist, you may create it. 
+The env.yml file is specific to topology. It contains Juniper Mist credentials and any variables that are defined in misty/flasky/files/deployment_vars.j2 template.  If env.yml file doesnt exist, you may create it. Anything thats related to mac address also needs to be filled in. This is the mac address that Mist uses to identify the device right from the time it was onboarded.
 
 At minimum, the env.yml file should containe below 3 variables. "host" is the mist instance that the user has an account in. "org_id" is the users Organization in the Mist instance while token is the token value from that Organization. The token can be generated under "My Account" in Mist.
 '''
