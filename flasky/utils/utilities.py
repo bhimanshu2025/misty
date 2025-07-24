@@ -74,7 +74,7 @@ class MistObj():
                 return items_found  
 
     def create_sites(self):
-        sites_data = self.data['sites']
+        sites_data = self.data.get('sites', [])
         created_sites = []
         try:
             sites = mist.orgs.sites.listOrgSites(self.session, org_id=self.org_id).data
@@ -113,7 +113,7 @@ class MistObj():
 
     def delete_sites(self):
         deleted_sites = []
-        sites_data = self.data['sites']
+        sites_data = self.data.get('sites', [])
         try:
             existing_sites = mist.orgs.sites.listOrgSites(self.session, org_id=self.org_id).data
             for s in sites_data:
@@ -145,7 +145,7 @@ class MistObj():
         return ["Successfully Deleted Sites"]
 
     def create_site_variables(self):
-        sites_data = self.data['sites']
+        sites_data = self.data.get('sites', [])
         created_sites = []
         try:
             sites = mist.orgs.sites.listOrgSites(self.session, org_id=self.org_id).data
@@ -163,7 +163,7 @@ class MistObj():
 
     def assign_devices(self):
         assigned_devices = []
-        sites_data = self.data['sites']
+        sites_data = self.data.get('sites', [])
         try:
             sites = mist.orgs.sites.listOrgSites(self.session, org_id=self.org_id).data
             aps = mist.orgs.inventory.getOrgInventory(self.session, org_id=self.org_id, type='ap').data
@@ -246,7 +246,7 @@ class MistObj():
 
     def unassign_devices(self):
         unassigned_devices = []
-        sites_data = self.data['sites']
+        sites_data = self.data.get('sites', [])
         try:
             # aps = mist.orgs.inventory.getOrgInventory(self.session, org_id=self.org_id, type='ap').data
             # switches = mist.orgs.inventory.getOrgInventory(self.session, org_id=self.org_id, type='switch').data
@@ -254,7 +254,7 @@ class MistObj():
             # all_devices = aps + switches + edges
             for s in sites_data:
                 assignments = s['assignments']
-                for e in assignments.get('edges'):
+                for e in assignments.get('edges', []):
                     payload = {
                             'op':'unassign',
                             'macs': [e['mac']]
@@ -263,7 +263,7 @@ class MistObj():
                     unassigned = mist.orgs.inventory.updateOrgInventoryAssignment(self.session, org_id=self.org_id, body=payload)
                     current_app.logger.info(unassigned.data)
                     unassigned_devices.append(unassigned.data)
-                for a in assignments.get('aps'):
+                for a in assignments.get('aps', []):
                     payload = {
                             'op':'unassign',
                             'macs': [a['mac']]
@@ -272,7 +272,7 @@ class MistObj():
                     unassigned = mist.orgs.inventory.updateOrgInventoryAssignment(self.session, org_id=self.org_id, body=payload)
                     current_app.logger.info(unassigned.data)
                     unassigned_devices.append(unassigned.data)
-                for sw in assignments.get('switches'):
+                for sw in assignments.get('switches', []):
                     payload = {
                             'op':'unassign',
                             'macs': [sw['mac']]
@@ -288,7 +288,7 @@ class MistObj():
     
     def create_networks(self):
         net_list = []
-        networks = self.data['networks']
+        networks = self.data.get('networks', [])
         try:
             existing_networks = mist.orgs.networks.listOrgNetworks(self.session, org_id=self.org_id).data
             for net in networks:
@@ -309,7 +309,7 @@ class MistObj():
     def delete_networks(self):
         deleted_networks = []
         try:
-            networks = self.data['networks']
+            networks = self.data.get('networks', [])
             existing_networks = mist.orgs.networks.listOrgNetworks(self.session, org_id=self.org_id).data
             # networks = mist.orgs.networks.listOrgNetworks(self.session, org_id=self.org_id).data
             for net in networks:
@@ -327,7 +327,7 @@ class MistObj():
         return [f"Successfully Deleted Networks {deleted_networks}"]
     
     def create_applications(self):
-        apps = self.data['applications']
+        apps = self.data.get('applications', [])
         created_apps = []
         try:
             existing_apps = mist.orgs.services.listOrgServices(self.session, org_id=self.org_id).data
@@ -349,7 +349,7 @@ class MistObj():
     def delete_applications(self):
         deleted_apps = []
         try:
-            apps = self.data['applications']
+            apps = self.data.get('applications', [])
             existing_apps = mist.orgs.services.listOrgServices(self.session, org_id=self.org_id).data
             for app in apps:
                 current_app.logger.info(f"Deleting Application: {app['name']}")
@@ -366,7 +366,7 @@ class MistObj():
         return [f"Successfully Deleted Applications {deleted_apps}"]
 
     def create_vpns(self):
-        vpns = self.data['vpns']
+        vpns = self.data.get('vpns', [])
         formatted_vpn = {}
         for vpn in vpns:
             formatted_vpn[vpn] = {}
@@ -394,7 +394,7 @@ class MistObj():
         return vpn_li
 
     def delete_vpns(self):
-        vpns = self.data['vpns']
+        vpns = self.data.get('vpns', [])
         formatted_vpn = {}
         for vpn in vpns:
             formatted_vpn[vpn] = {}
@@ -422,7 +422,7 @@ class MistObj():
         return ["Successfully Deleted VPN's"]
     
     def create_hub_profiles(self):
-        hub_profiles = self.data['hub_profiles']
+        hub_profiles = self.data.get('hub_profiles', [])
         created_hub_profiles = []
         assigned_hub_profile = []
         try:
@@ -461,7 +461,7 @@ class MistObj():
     def delete_hub_profiles(self):
         deleted_hub_profiles = []
         try:
-            hub_profiles = self.data['hub_profiles']
+            hub_profiles = self.data.get('hub_profiles', [])
             existing_hubs = mist.orgs.deviceprofiles.listOrgDeviceProfiles(self.session, org_id=self.org_id, type='gateway').data
             for hub in hub_profiles:
                 current_app.logger.info(f"Deleting Hub Profile: {hub['name']}")
@@ -485,7 +485,7 @@ class MistObj():
     def create_wan_edge_templates(self):
         created_templates = []
         assigned_templates = []
-        edge_templates = self.data['wan_edge_templates']
+        edge_templates = self.data.get('wan_edge_templates', [])
         try:
             existing_edges = mist.orgs.gatewaytemplates.listOrgGatewayTemplates(self.session, org_id=self.org_id).data
             sites = mist.orgs.sites.listOrgSites(self.session, org_id=self.org_id).data
@@ -514,7 +514,7 @@ class MistObj():
     def delete_wan_edge_templates(self):
         deleted_templates = []
         try:
-            edge_templates = self.data['wan_edge_templates']
+            edge_templates = self.data.get('wan_edge_templates', [])
             existing_edges = mist.orgs.gatewaytemplates.listOrgGatewayTemplates(self.session, org_id=self.org_id).data
             for edge in edge_templates:
                 current_app.logger.info(f"Deleting WAN Edge Template: {edge['name']}")
@@ -524,7 +524,7 @@ class MistObj():
                     current_app.logger.info(deleted.status_code)
                     deleted_templates.append(deleted.data)
                 else:
-                    current_app.logger.info(f"Wan Edge Template {edge['nam']} does not exist in Mist.")
+                    current_app.logger.info(f"Wan Edge Template {edge['name']} does not exist in Mist.")
         except Exception as err:
             current_app.logger.exception(f'Error is: {err}')
             return f"Error is: {err}"
@@ -533,7 +533,7 @@ class MistObj():
     def create_switch_templates(self):
         created_templates = []
         assigned_templates = []
-        switch_templates = self.data['switch_templates']
+        switch_templates = self.data.get('switch_templates', [])
         try:
             existing_sws = mist.orgs.networktemplates.listOrgNetworkTemplates(self.session, org_id=self.org_id).data
             sites = mist.orgs.sites.listOrgSites(self.session, org_id=self.org_id).data
@@ -562,7 +562,7 @@ class MistObj():
     def delete_switch_templates(self):
         deleted_templates =[]
         try:
-            switch_templates = self.data['switch_templates']
+            switch_templates = self.data.get('switch_templates', [])
             existing_sws = mist.orgs.networktemplates.listOrgNetworkTemplates(self.session, org_id=self.org_id).data
             for sw in switch_templates:
                 current_app.logger.info(f"Deleting Switch Template: {sw['name']}")
@@ -580,7 +580,7 @@ class MistObj():
     
     def create_wlan_templates(self):
         created_templates = []
-        wlan_templates = self.data['wlan_templates']
+        wlan_templates = self.data.get('wlan_templates', [])
         try:
             existing_wlan_templates = mist.orgs.templates.listOrgTemplates(self.session, org_id=self.org_id).data
             for w in wlan_templates:
@@ -601,7 +601,7 @@ class MistObj():
     def delete_wlan_templates(self):
         deleted_templates = []
         try:
-            wlan_templates = self.data['wlan_templates']
+            wlan_templates = self.data.get('wlan_templates', [])
             existing_wlan_templates = mist.orgs.templates.listOrgTemplates(self.session, org_id=self.org_id).data
             for w in wlan_templates:
                 current_app.logger.info(f"Deleting WLAN Template: {w['name']}")
@@ -619,7 +619,7 @@ class MistObj():
     
     def create_wlans(self):
         created_wlans = []
-        wlans = self.data['wlans']
+        wlans = self.data.get('wlans', [])
         try:
             existing_wlans = mist.orgs.wlans.listOrgWlans(self.session, org_id=self.org_id).data
             for wlan in wlans:
@@ -648,7 +648,7 @@ class MistObj():
     def delete_wlans(self):
         deleted_wlans = []
         try:
-            wlans = self.data['wlans']
+            wlans = self.data.get('wlans', [])
             existing_wlans = mist.orgs.wlans.listOrgWlans(self.session, org_id=self.org_id).data
             for wlan in wlans:
                 current_app.logger.info(f"Deleting WLAN: {wlan['ssid']}")
@@ -670,7 +670,7 @@ class MistObj():
             characters = string.ascii_letters + string.digits
             password = ''.join(random.choice(characters) for i in range(length))
             return password
-        psks = self.data['psks']
+        psks = self.data.get('psks', [])
         try:
             existing_psks = mist.orgs.psks.listOrgPsks(self.session, org_id=self.org_id).data
             for psk in psks:
@@ -698,7 +698,7 @@ class MistObj():
     def delete_psks(self):
         deleted_psks = []
         try:
-            psks = self.data['psks']
+            psks = self.data.get('psks', [])
             existing_psks = mist.orgs.psks.listOrgPsks(self.session, org_id=self.org_id).data
             for psk in psks:
                 current_app.logger.info(f"Deleting PSK: {psk['name']}")
@@ -764,4 +764,4 @@ class MistObj():
         sleep(1)
         k = self.delete_sites()
         sleep(1)
-        return a + b + c + d + e + f + g + h + i + j + k
+        return [a] + [b] + [c] + [d] + [e] + [f] + [g] + [h] + [i] + [j] + [k]
